@@ -21,6 +21,7 @@ namespace UnitTestProjectFraction
             Fraction ExpectedObject = new Fraction(pExpectedNum, pExpectedDeno);
             Fraction F1 = new Fraction(pNum1, pDeno1);
             Fraction F2 = new Fraction(pNum2, pDeno2);
+            Fraction F3 = new Fraction(F2);
             Fraction result = F1 + F2;
 
             Assert.AreEqual(ExpectedObject, result);            
@@ -101,6 +102,76 @@ namespace UnitTestProjectFraction
             //Assert.AreEqual(2, f.Numerator);
             //Assert.AreEqual(0, f.Denominator);
         }
-        
+
+
+
+        [DataRow(1, 6, 1, 2, true, DisplayName = "Comparer (1/6) et (1/2)")]
+        [DataRow(1, 8, 1, 13, false, DisplayName = "Comparer (1/8) et (1/13)")]
+        [TestMethod]
+        public void CompareIfIsLessThan(int pNum1, int pDeno1, int pNum2, int pDeno2, bool pExpected)
+        {
+            Fraction F1 = new Fraction(pNum1, pDeno1);
+            Fraction F2 = new Fraction(pNum2, pDeno2);
+            bool result = F1 < F2;
+
+            Assert.AreEqual(pExpected, result);
+        }
+
+        [DataRow(1, 4, 1, 2, false, DisplayName = "Comparer (1/4) et (1/2)")]
+        [DataRow(1, 2, 1, 4, true, DisplayName = "Comparer (1/2) et (1/4)")]
+        [TestMethod]
+        public void CompareIfIsGreaterThan(int pNum1, int pDeno1, int pNum2, int pDeno2, bool pExpected)
+        {
+            Fraction F1 = new Fraction(pNum1, pDeno1);
+            Fraction F2 = new Fraction(pNum2, pDeno2);
+            bool result = F1 > F2;
+
+            Assert.AreEqual(pExpected, result);
+        }
+
+        [DataRow(1, 4, 1, 2, false, DisplayName = "Comparer (1/4) et (1/2)")]
+        [DataRow(-1, 1, 1, -1, true, DisplayName = "Comparer (-1/1) et (1/-1)")]
+        [TestMethod]
+        public void CompareIfIsEqual(int pNum1, int pDeno1, int pNum2, int pDeno2, bool pExpected)
+        {
+            Fraction F1 = new Fraction(pNum1, pDeno1);
+            Fraction F2 = new Fraction(pNum2, pDeno2);
+            bool result = F1 == F2;
+
+            Assert.AreEqual(pExpected, result);
+        }
+
+        [DataRow(5, -13, "-5/13", DisplayName = "Cas particulier: 5/-13")]
+        [DataRow(-1, 1, "-1/1", DisplayName = "Cas particulier: -1/1")]
+        [TestMethod]
+        public void ConvertToString(int pNum, int pDeno, string pExpected)
+        {
+            Fraction fract = new Fraction(pNum, pDeno);
+            string result = (string)fract;
+
+            Assert.AreEqual(pExpected, result);
+        }
+
+        [DataRow(1, 2, "0,5", DisplayName = "Cas particulier: convertir une fraction en décimal")]
+        [TestMethod]
+        public void ConvertFractionToDecimal(int pNum, int pDeno, string pExpected)
+        {
+            decimal ExpectedValue = decimal.Parse(pExpected);
+            Fraction fract = new Fraction(pNum, pDeno);
+            decimal result = (decimal)fract;
+
+            Assert.AreEqual(ExpectedValue, result);
+        }
+
+        //[DataRow("0,5", 1, 2, DisplayName = "Cas particulier: 0,5")]
+        //[TestMethod]
+        //public void ConvertDecimalToFraction(string pDecimal, int pNum, int pDeno)
+        //{
+        //    decimal stringToDec = decimal.Parse(pDecimal);
+        //    Fraction result = (Fraction)stringToDec;
+        //    Fraction Expected = new Fraction(pNum, pDeno);            
+
+        //    Assert.AreEqual(Expected, result);
+        //}
     }
 }
