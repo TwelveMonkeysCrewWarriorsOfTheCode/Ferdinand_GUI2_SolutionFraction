@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ProjetFractionDAL;
 
 namespace FractionBLL
 {
@@ -114,7 +115,7 @@ namespace FractionBLL
                 this.m_Numerator = -this.m_Numerator;
                 this.m_Denominator = -this.m_Denominator;
             }
-            int myDCD = GCD(this.m_Numerator, this.m_Denominator);
+            int myDCD = Math.Abs(GCD(this.m_Numerator, this.m_Denominator));
             this.m_Numerator /= myDCD;
             this.m_Denominator /= myDCD;
         }
@@ -173,6 +174,13 @@ namespace FractionBLL
         int IComparable<Fraction>.CompareTo(Fraction other)
         {
             throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Transfering method data
+        public static bool EltsToSave(List<string> pElements)
+        {
+            return FractionDAL.SaveToCSVFile(pElements);
         } 
         #endregion
     }
