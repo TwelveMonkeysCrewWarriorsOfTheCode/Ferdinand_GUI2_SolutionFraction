@@ -74,7 +74,7 @@ namespace FractionBLL
         }
         #endregion
 
-        #region Conversion logical
+        #region Conversion logic
         public static implicit operator string(Fraction pFraction)
         {
             return pFraction.ToString();
@@ -88,13 +88,52 @@ namespace FractionBLL
             return (decimal)((double)pFraction.m_Numerator / (double)pFraction.m_Denominator);
         }
 
-        //public static explicit operator Fraction(decimal pdecimal)
-        //{
-        //    return (Fraction)pdecimal;
-        //} 
+        public static explicit operator Fraction(decimal pdecimal)
+        {
+            string myDecimal = pdecimal.ToString();
+            int numberOfTen;
+            int numerator = int.Parse(myDecimal.Split(",")[0]);
+            int denominator = int.Parse(myDecimal.Split(",")[1]);
+            int decimalLength = myDecimal.Split(",")[1].Length;
+            if (numerator == 0)
+            {
+                numerator = 1;
+                numberOfTen = CalculateNumberOfTen(decimalLength);                
+                numerator *= denominator;
+                denominator = numberOfTen;
+                return new Fraction(numerator, denominator);
+            }
+            else
+            {
+                numberOfTen = CalculateNumberOfTen(decimalLength);
+                Fraction fractionRightPart = new Fraction(denominator, numberOfTen);
+                Fraction fractionLeftPart = new Fraction(numerator);
+                return fractionLeftPart + fractionRightPart;
+            }
+
+
+        }
         #endregion
 
         #region Methods
+        private static int CalculateNumberOfTen(int decimalLength)
+        {
+            int numberOfTen;
+            if (decimalLength > 1)
+            {
+                numberOfTen = 1;
+                for (int i = 0; i < decimalLength; i++)
+                {
+                    numberOfTen *= 10;
+                }
+            }
+            else
+            {
+                numberOfTen = 10;
+            }
+
+            return numberOfTen;
+        }
         private static int NumeratorRightOperation(Fraction pFraction1, Fraction pFraction2) =>
            pFraction1.m_Denominator * pFraction2.m_Numerator;
         private static int NumeratorLeftOperation(Fraction pFraction1, Fraction pFraction2) =>
@@ -177,7 +216,7 @@ namespace FractionBLL
         }
         #endregion
 
-        #region Transfering method data
+        #region Transfering data method
         public static bool EltsToSave(List<string> pElements)
         {
             return FractionDAL.SaveToCSVFile(pElements);

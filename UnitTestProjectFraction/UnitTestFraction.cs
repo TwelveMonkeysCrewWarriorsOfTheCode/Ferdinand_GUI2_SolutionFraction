@@ -163,15 +163,72 @@ namespace UnitTestProjectFraction
             Assert.AreEqual(ExpectedValue, result);
         }
 
-        //[DataRow("0,5", 1, 2, DisplayName = "Cas particulier: 0,5")]
-        //[TestMethod]
-        //public void ConvertDecimalToFraction(string pDecimal, int pNum, int pDeno)
-        //{
-        //    decimal stringToDec = decimal.Parse(pDecimal);
-        //    Fraction result = (Fraction)stringToDec;
-        //    Fraction Expected = new Fraction(pNum, pDeno);            
+        [DataRow("0,25", 1, 4, DisplayName = "Cas particulier: 0,25")]
+        [DataRow("0,5", 1, 2, DisplayName = "Cas particulier: 0,5")]
+        [TestMethod]
+        public void ConvertDecimalToFraction(string pDecimal, int pNum, int pDeno)
+        {
+            int numberOfTen;
+            int numerator = int.Parse(pDecimal.Split(",")[0]);
+            int denominator = int.Parse(pDecimal.Split(",")[1]);
+            int decimalLength = pDecimal.Split(",")[1].Length;
+            if (numerator == 0)
+            {
+                numerator = 1;
+                if (decimalLength > 1)
+                {
+                    numberOfTen = 1;
+                    for (int i = 0; i < decimalLength; i++)
+                    {
+                        numberOfTen *= 10;
+                    }
+                }
+                else
+                {
+                    numberOfTen = 10;
+                }
+                
+                numerator *= denominator;
+                denominator = numberOfTen;
+                Fraction result = new Fraction(numerator, denominator);
+                Fraction expected = new Fraction(pNum, pDeno);
 
-        //    Assert.AreEqual(Expected, result);
-        //}
+                Assert.AreEqual(expected, result);
+            }
+            else
+            {
+                if (decimalLength > 1)
+                {
+                    numberOfTen = 1;
+                    for (int i = 0; i < decimalLength; i++)
+                    {
+                        numberOfTen *= 10;
+                    }
+                }
+                else
+                {
+                    numberOfTen = 10;
+                }
+                Fraction fractionRightPart = new Fraction(denominator, numberOfTen);
+                Fraction fractionLeftPart = new Fraction(numerator);
+                Fraction result = fractionLeftPart + fractionRightPart;
+                Fraction expected = new Fraction(pNum, pDeno);
+
+                Assert.AreEqual(expected, result);
+            }            
+        }
+
+        [DataRow("2,75", 11, 4, DisplayName = "Cas particulier: 2,75")]
+        [DataRow("2,5", 5, 2, DisplayName = "Cas particulier: 2,5")]
+        [DataRow("0,75", 3, 4, DisplayName = "Cas particulier: 0,75")]
+        [TestMethod]
+        public void CastDecimalToFraction(string pDecimal, int pNum, int pDeno)
+        {
+            decimal mydec = decimal.Parse(pDecimal);
+            Fraction Expected = new Fraction(pNum, pDeno);
+            Fraction result = (Fraction)mydec;
+
+            Assert.AreEqual(Expected, result);
+        }
     }
 }

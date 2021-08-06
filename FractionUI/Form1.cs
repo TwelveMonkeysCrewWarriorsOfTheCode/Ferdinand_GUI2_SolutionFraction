@@ -27,10 +27,10 @@ namespace FractionUI
         {
             #region Arithmetic operations
             List<string> elementsToSave = new List<string>();
-            FirstElementsToSave(elementsToSave, TBArithmeticFraction1.Text);
-            Fraction f1 = BuildFraction1(TBArithmeticFraction1.Text);
+            FirstElementsToSave(elementsToSave, NormalizedFraction(TBArithmeticFraction1.Text));
+            Fraction f1 = BuildFraction1(NormalizedFraction(TBArithmeticFraction1.Text));
             //MessageBox.Show(f1);
-            Fraction f2 = BuildFraction2(TBArithmeticFraction2.Text);
+            Fraction f2 = BuildFraction2(NormalizedFraction(TBArithmeticFraction2.Text));
             switch (CBSelectOperation.SelectedIndex)
             {
                 case 0:
@@ -51,10 +51,8 @@ namespace FractionUI
                     break;
             }
             //MessageBox.Show(elementsToSave.Count.ToString());            
-            bool result = Fraction.EltsToSave(elementsToSave);
             //MessageBox.Show($"Eléments sauvés: {result}");
-            RTBSave.Text += $"{elementsToSave[0]},{elementsToSave[1]},{elementsToSave[2]},{elementsToSave[3]}" +
-                $",{elementsToSave[4]},{elementsToSave[5]}\n"; 
+            SavingHistoric(elementsToSave, SendDataToBLL(elementsToSave)); 
             #endregion
         }       
 
@@ -62,9 +60,9 @@ namespace FractionUI
         {
             #region Comparing operations
             List<string> comparingElementsToSave = new List<string>();
-            FirstElementsToSave(comparingElementsToSave, TBCompFraction1.Text);
-            Fraction f1 = BuildFraction1(TBCompFraction1.Text);
-            Fraction f2 = BuildFraction2(TBCompFraction2.Text);
+            FirstElementsToSave(comparingElementsToSave, NormalizedFraction(TBCompFraction1.Text));
+            Fraction f1 = BuildFraction1(NormalizedFraction(TBCompFraction1.Text));
+            Fraction f2 = BuildFraction2(NormalizedFraction(TBCompFraction2.Text));
             if (f1 > f2)
             {
                 TBCompResult.Text = $"{f1} est plus grand que {f2}";
@@ -80,13 +78,28 @@ namespace FractionUI
                 TBCompResult.Text = $"{f1} est égal à {f2}";
                 CompleteListEltsComparing(comparingElementsToSave, "=");
             }
-            bool result = Fraction.EltsToSave(comparingElementsToSave);
-            RTBSave.Text += $"{comparingElementsToSave[0]},{comparingElementsToSave[1]}," +
-                $"{comparingElementsToSave[2]},{comparingElementsToSave[3]},{comparingElementsToSave[4]}\n"; 
+            SavingHistoric(comparingElementsToSave, SendDataToBLL(comparingElementsToSave));
             #endregion
         }
 
         #region Methods
+        private bool SendDataToBLL(List<string> pElementsToSave)
+        {
+            return Fraction.EltsToSave(pElementsToSave);
+        }
+        private void SavingHistoric(List<string> pElementsToSave, bool result)
+        {
+            if (result)
+            {
+                StringBuilder savingHistoric = new StringBuilder();
+                foreach (var element in pElementsToSave)
+                {
+                    savingHistoric.Append($"{element},");
+                }
+                int lastPosition = savingHistoric.Length - 1;
+                RTBSave.Text += savingHistoric.ToString().Remove(lastPosition) + "\n";
+            }
+        }
         private void FirstElementsToSave(List<string> pElementsToSave, string pFraction1)
         {
             pElementsToSave.Add(DateTime.Now.ToShortDateString());
@@ -96,29 +109,46 @@ namespace FractionUI
         private void CompleteListEltsComparing(List<string> pComparingElementsToSave, string pCompSign)
         {
             pComparingElementsToSave.Add(pCompSign);
-            pComparingElementsToSave.Add(TBCompFraction2.Text);
+            pComparingElementsToSave.Add(NormalizedFraction(TBCompFraction2.Text));
         }
 
         private void CompleteList(List<string> elementsToSave)
         {
             elementsToSave.Add(CBSelectOperation.Text);
-            elementsToSave.Add(TBArithmeticFraction2.Text);
+            elementsToSave.Add(NormalizedFraction(TBArithmeticFraction2.Text));
             elementsToSave.Add(TBArithmeticResult.Text);
         }
         private Fraction BuildFraction1(string pFraction1)
         {
-            if (pFraction1 == string.Empty) throw new ArgumentNullException("Le champ est vide");
-            List<string> numDeno = new List<string>(pFraction1.Split("/"));
+            string fraction1 = NormalizedFraction(pFraction1);
+
+            if (fraction1 == string.Empty) throw new ArgumentNullException("Le champ est vide");
+            List<string> numDeno = new List<string>(fraction1.Split("/"));
             int numerator = int.Parse(numDeno[0]);
             int denominator = int.Parse(numDeno[1]);
             //MessageBox.Show($"{numerator} , {denominator}");
             return new Fraction(numerator, denominator);
         }
 
+        private string NormalizedFraction(string pFraction1)
+        {
+            string fractionToNormalize = pFraction1.Normalize(NormalizationForm.FormD);
+            StringBuilder inputFraction = new StringBuilder();
+            for (int i = 0; i < fractionToNormalize.Length; i++)
+            {
+                if (fractionToNormalize[i] >= '0' && fractionToNormalize[i] <= '9' || fractionToNormalize[i] == '-' || fractionToNormalize[i] == '/')
+                {
+                    inputFraction.Append(fractionToNormalize[i]);
+                }
+            }
+            return inputFraction.ToString();
+        }
+
         private Fraction BuildFraction2(string pFraction2)
         {
-            if (pFraction2 == string.Empty) throw new ArgumentNullException("Le champ est vide");
-            List<string> numDeno = new List<string>(pFraction2.Split("/"));
+            string fraction2 = NormalizedFraction(pFraction2);
+            if (fraction2 == string.Empty) throw new ArgumentNullException("Le champ est vide");
+            List<string> numDeno = new List<string>(fraction2.Split("/"));
             int numerator = int.Parse(numDeno[0]);
             int denominator = int.Parse(numDeno[1]);
             return new Fraction(numerator, denominator);
