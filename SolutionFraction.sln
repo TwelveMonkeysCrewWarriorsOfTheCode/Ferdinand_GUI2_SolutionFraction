@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestProjectFraction", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FractionUI", "FractionUI\FractionUI.csproj", "{79A12374-D75D-4D86-851C-104D4500F675}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetFractionDAL", "FractionDAL\ProjetFractionDAL.csproj", "{32AB21C8-6971-46D8-AD1A-BA52AACB2B2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetFractionDAL", "FractionDAL\ProjetFractionDAL.csproj", "{32AB21C8-6971-46D8-AD1A-BA52AACB2B2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetFractionUIWithNumericComp", "ProjetFractionUIWithNumericComp\ProjetFractionUIWithNumericComp.csproj", "{BC76ABEF-D83D-4FF8-B855-28CB9EB33A82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{32AB21C8-6971-46D8-AD1A-BA52AACB2B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32AB21C8-6971-46D8-AD1A-BA52AACB2B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32AB21C8-6971-46D8-AD1A-BA52AACB2B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC76ABEF-D83D-4FF8-B855-28CB9EB33A82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC76ABEF-D83D-4FF8-B855-28CB9EB33A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC76ABEF-D83D-4FF8-B855-28CB9EB33A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC76ABEF-D83D-4FF8-B855-28CB9EB33A82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -87,9 +87,9 @@ namespace FractionUI
         {
             return Fraction.EltsToSave(pElementsToSave);
         }
-        private void SavingHistoric(List<string> pElementsToSave, bool result)
+        private void SavingHistoric(List<string> pElementsToSave, bool pResult)
         {
-            if (result)
+            if (pResult)
             {
                 StringBuilder savingHistoric = new StringBuilder();
                 foreach (var element in pElementsToSave)
